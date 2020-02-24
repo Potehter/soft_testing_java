@@ -26,41 +26,6 @@ public class CreateGroup {
     submitGroupCreation();
   }
 
-  @Test
-  public void testCreateContact() throws Exception {
-    initContactPage();
-    fillContactInfo(new ContactData("Name", "Middle name", "Surname", "nick", "title", "company"));
-    submitContactCreation();
-    gotoHomePage();
-  }
-
-  private void gotoHomePage() {
-    driver.findElement(By.linkText("home page")).click();
-  }
-
-  private void submitContactCreation() {
-    driver.findElement(By.name("submit")).click();
-  }
-
-  private void fillContactInfo(ContactData contactData) {
-    driver.findElement(By.name("firstname")).click();
-    driver.findElement(By.name("firstname")).clear();
-    driver.findElement(By.name("firstname")).sendKeys(contactData.getName());
-    driver.findElement(By.name("middlename")).clear();
-    driver.findElement(By.name("middlename")).sendKeys(contactData.getMidName());
-    driver.findElement(By.name("lastname")).clear();
-    driver.findElement(By.name("lastname")).sendKeys(contactData.getSurname());
-    driver.findElement(By.name("nickname")).clear();
-    driver.findElement(By.name("nickname")).sendKeys(contactData.getNickname());
-    driver.findElement(By.name("title")).clear();
-    driver.findElement(By.name("title")).sendKeys(contactData.getTitle());
-    driver.findElement(By.name("company")).clear();
-    driver.findElement(By.name("company")).sendKeys(contactData.getCompany());
-  }
-
-  private void initContactPage() {
-    driver.findElement(By.linkText("add new")).click();
-  }
 
   private void submitGroupCreation() {
     driver.findElement(By.name("submit")).click();
