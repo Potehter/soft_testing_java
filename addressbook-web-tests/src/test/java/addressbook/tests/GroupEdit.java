@@ -7,7 +7,11 @@ public class GroupEdit extends BaseTest {
 
   @Test
   public void testGroupEdit() throws Exception {
-    app.getGroupHelper().gotoGroupPage();
+    app.getNavigationHelper().gotoGroupPage();
+    if (! app.getGroupHelper().ThereAGroup()) {
+      app.getGroupHelper().createGroup(new GroupData("test01", "test2", "test3"));
+    }
+    app.getNavigationHelper().gotoGroupPage();
     app.getGroupHelper().selectGroup();
     app.getGroupHelper().initEditGroup();
     app.getGroupHelper().fillGroupInfo(new GroupData("test01_edited", "test2_edited", "test3_edited"));

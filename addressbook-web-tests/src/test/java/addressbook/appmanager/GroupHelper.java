@@ -24,9 +24,6 @@ public class GroupHelper extends BaseHelper{
       click(By.name("new"));
     }
 
-    public void gotoGroupPage() {
-      click(By.linkText("groups"));
-    }
 
     public void selectGroup() {
         click(By.name("selected[]"));
@@ -42,5 +39,15 @@ public class GroupHelper extends BaseHelper{
 
     public void deleteGroup() {
         click(By.name("delete"));
+    }
+
+    public void createGroup(GroupData groupData) {
+        initGroupCreation();
+        fillGroupInfo(groupData);
+        submitGroupCreation();
+    }
+
+    public boolean ThereAGroup() {
+        return isElementPresent(By.name("selected[]"));
     }
 }
