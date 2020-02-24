@@ -3,7 +3,7 @@ package addressbook.tests;
 import addressbook.model.GroupData;
 import org.testng.annotations.Test;
 
-public class CreateGroup extends BaseTest {
+public class GroupCreate extends BaseTest {
 
   @Test
   public void testCreateGroup() throws Exception {
