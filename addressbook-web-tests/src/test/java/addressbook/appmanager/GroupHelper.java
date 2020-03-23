@@ -3,6 +3,10 @@ package addressbook.appmanager;
 import addressbook.model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GroupHelper extends BaseHelper{
 
@@ -25,8 +29,8 @@ public class GroupHelper extends BaseHelper{
     }
 
 
-    public void selectGroup() {
-        click(By.name("selected[]"));
+    public void selectGroup(int i) {
+        driver.findElements(By.name("selected[]")).get(i).click();
     }
 
     public void initEditGroup() {
@@ -49,5 +53,19 @@ public class GroupHelper extends BaseHelper{
 
     public boolean ThereAGroup() {
         return isElementPresent(By.name("selected[]"));
+    }
+
+    public List<GroupData> getGroupList() {
+        List<GroupData> groups = new ArrayList<GroupData>();
+        List<WebElement> elements = driver.findElements(By.cssSelector("span.group"));
+        for (WebElement element : elements) {
+            String groupName = element.getText();
+            GroupData group = new GroupData(groupName, null, null);
+            groups.add(group);
+        }
+        return groups;
+    }
+
+    public void returnToGroupPage() { click(By.cssSelector("a[href='group.php']"));
     }
 }
