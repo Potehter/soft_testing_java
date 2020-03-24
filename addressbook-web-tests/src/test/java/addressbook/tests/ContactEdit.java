@@ -1,33 +1,38 @@
 package addressbook.tests;
 
 import addressbook.model.ContactData;
-import org.testng.Assert;
+import addressbook.model.Contacts;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.Comparator;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 public class ContactEdit extends BaseTest {
 
+    @BeforeMethod
+    public void ensurePreconditiions() {
+        if (! app.contact().ThereAContact()) {
+            app.contact().create(new ContactData().
+                    withName("Name").withMidName("Middle name").withSurname("Surname").withNickname("nick").
+                    withTitle("title").withCompany("company"), true);
+        }
+        app.goTo().homePage();
+    }
+
     @Test
     public void testEditContact() throws Exception {
-        if (! app.getContactHelper().ThereAContact()) {
-            app.getContactHelper().createContact(new ContactData("Name", "Middle name", "Surname", "nick", "title", "company"), true);
-        }
-        List<ContactData> before = app.getContactHelper().getContactList();
-        app.getNavigationHelper().gotoHomePage();
-        app.getContactHelper().editContact(before.size() - 1);
-        ContactData contact = new ContactData(before.get(before.size() - 1).getId(), "Name_edited", "Middle name", "Surname_edited", "nick_edited", "title", "company");
-        app.getContactHelper().fillContactInfo(contact, false);
-        app.getContactHelper().submitContactEdition();
-        app.getNavigationHelper().gotoHomePage();
-        List<ContactData> after = app.getContactHelper().getContactList();
-        before.remove(before.size() - 1);
-        before.add(contact);
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
-        Assert.assertEquals(before, after);
+        Contacts before = app.contact().all();
+        ContactData modifiedContact = before.iterator().next();
+        ContactData contact = new ContactData().
+                withId(modifiedContact.getId()).withName("Name_edited").withSurname("Surname_edited").withMidName("mid name edir").
+                withNickname("nick").withTitle("title").withCompany("company");
+        app.contact().modify(modifiedContact.getId(), contact);
+        app.goTo().homePage();
+        Contacts after = app.contact().all();
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
+
+
 
 }

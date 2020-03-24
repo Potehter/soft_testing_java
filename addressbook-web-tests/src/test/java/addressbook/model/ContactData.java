@@ -3,43 +3,13 @@ package addressbook.model;
 import java.util.Objects;
 
 public class ContactData {
-    private int id;
-    private final String name;
-    private final String midName;
-    private final String surname;
-    private final String nickname;
-    private final String title;
-    private final String company;
-
-    public ContactData(String name, String midName, String surname, String nickname, String title, String company) {
-        this.name = name;
-        this.midName = midName;
-        this.surname = surname;
-        this.nickname = nickname;
-        this.title = title;
-        this.company = company;
-        this.id = Integer.MAX_VALUE;
-    }
-
-    public ContactData(int id, String name, String midName, String surname, String nickname, String title, String company) {
-        this.name = name;
-        this.midName = midName;
-        this.surname = surname;
-        this.nickname = nickname;
-        this.title = title;
-        this.company = company;
-        this.id = id;
-    }
-
-    public ContactData(int id, String name, String surname) {
-        this.name = name;
-        this.midName = "";
-        this.surname = surname;
-        this.nickname = "";
-        this.title = "";
-        this.company = "";
-        this.id = id;
-    }
+    private int id = Integer.MAX_VALUE;
+    private String name;
+    private String midName;
+    private String surname;
+    private String nickname;
+    private String title;
+    private String company;
 
     public int getId() {
         return id;
@@ -74,13 +44,14 @@ public class ContactData {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContactData that = (ContactData) o;
-        return Objects.equals(name, that.name) &&
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(surname, that.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname);
+        return Objects.hash(id, name, surname);
     }
 
     @Override
@@ -89,5 +60,40 @@ public class ContactData {
                 "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 '}';
+    }
+
+    public ContactData withId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public ContactData withName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public ContactData withMidName(String midName) {
+        this.midName = midName;
+        return this;
+    }
+
+    public ContactData withSurname(String surname) {
+        this.surname = surname;
+        return this;
+    }
+
+    public ContactData withNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
+    public ContactData withTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    public ContactData withCompany(String company) {
+        this.company = company;
+        return this;
     }
 }

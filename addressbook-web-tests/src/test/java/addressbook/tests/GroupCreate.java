@@ -1,33 +1,27 @@
 package addressbook.tests;
 
 import addressbook.model.GroupData;
-import org.testng.Assert;
+import addressbook.model.Groups;
 import org.testng.annotations.Test;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.*;
 
 public class GroupCreate extends BaseTest {
 
   @Test
   public void testCreateGroup() throws Exception {
-    app.getNavigationHelper().gotoGroupPage();
-    List<GroupData> before = app.getGroupHelper().getGroupList();
-    app.getGroupHelper().initGroupCreation();
-    GroupData group = new GroupData("test01", "test2", "test3");
-    app.getGroupHelper().fillGroupInfo(group);
-    app.getGroupHelper().submitGroupCreation();
-    app.getGroupHelper().returnToGroupPage();
-    List<GroupData> after = app.getGroupHelper().getGroupList();
-    Assert.assertEquals(after.size(), before.size() + 1);
-
-    before.add(group);
-    Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId);
-    after.sort(byId);
-    Assert.assertEquals(before, after);
+    app.goTo().groupPage();
+    Groups before = app.group().all();
+    GroupData group = new GroupData().
+            withName("test01").withHeader("test2").withFooter("test3");
+    app.group().create(group);
+    Groups after = app.group().all();
+    group.withId(after.stream().mapToInt( (g) -> g.getId()).max().getAsInt());
+    assertThat(after, equalTo(before.withAdded(group)));
   }
+
+
 
 
 }

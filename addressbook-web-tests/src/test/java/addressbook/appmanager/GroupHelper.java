@@ -1,12 +1,15 @@
 package addressbook.appmanager;
 
 import addressbook.model.GroupData;
+import addressbook.model.Groups;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GroupHelper extends BaseHelper{
 
@@ -24,14 +27,37 @@ public class GroupHelper extends BaseHelper{
         type(By.name("group_footer"), groupData.getFooter());
     }
 
+    public void create(GroupData group) {
+        initGroupCreation();
+        fillGroupInfo(group);
+        submitGroupCreation();
+        returnToGroupPage();
+    }
+
+    public void modify(GroupData group) {
+        selectGroupById(group.getId());
+        initEditGroup();
+        fillGroupInfo(group);
+        submitGroupEdit();
+        returnToGroupPage();
+    }
+
+    public void delete(GroupData deletedGroup) {
+        selectGroupById(deletedGroup.getId());
+        deleteGroup();
+        returnToGroupPage();
+    }
+
+
     public void initGroupCreation() {
       click(By.name("new"));
     }
 
 
-    public void selectGroup(int i) {
-        driver.findElements(By.name("selected[]")).get(i).click();
+    public void selectGroupById(int id) {
+        driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
     }
+
 
     public void initEditGroup() {
         click(By.name("edit"));
@@ -55,13 +81,24 @@ public class GroupHelper extends BaseHelper{
         return isElementPresent(By.name("selected[]"));
     }
 
-    public List<GroupData> getGroupList() {
-        List<GroupData> groups = new ArrayList<GroupData>();
+    public List<GroupData> list() {
+            List<GroupData> groups = new ArrayList<GroupData>();
+            List<WebElement> elements = driver.findElements(By.cssSelector("span.group"));
+            for (WebElement element : elements) {
+                String groupName = element.getText();
+                GroupData group = new GroupData().withName(groupName);
+                groups.add(group);
+            }
+            return groups;
+    }
+
+    public Groups all() {
+        Groups groups = new Groups();
         List<WebElement> elements = driver.findElements(By.cssSelector("span.group"));
         for (WebElement element : elements) {
             String groupName = element.getText();
-            GroupData group = new GroupData(groupName, null, null);
-            groups.add(group);
+            int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+            groups.add(new GroupData().withId(id).withName(groupName));
         }
         return groups;
     }
