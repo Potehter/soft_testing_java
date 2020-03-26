@@ -18,7 +18,7 @@ public class ContactDeletion extends BaseTest {
 
     @BeforeMethod
     public void ensurePreconditiions() {
-        if (! app.contact().ThereAContact()) {
+        if (app.contact().all().size() == 0) {
             app.contact().create(new ContactData().
                     withName("Name").withMidName("Middle name").withSurname("Surname").withNickname("nick").
                     withTitle("title").withCompany("company"), true);
@@ -33,6 +33,7 @@ public class ContactDeletion extends BaseTest {
         app.contact().delete(deletedContact);
         app.goTo().submitAlert();
         app.goTo().homePage();
+        assertThat(app.contact().count(), equalTo(before.size() - 1));
         Contacts after = app.contact().all();
         assertThat(after, equalTo(before.without(deletedContact)));
     }

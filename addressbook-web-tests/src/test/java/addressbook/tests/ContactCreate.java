@@ -18,6 +18,7 @@ public class ContactCreate extends BaseTest {
                 withNickname("nick").withTitle("title").withCompany("company");
         app.contact().create(contact);
         app.goTo().homePage();
+        assertThat(app.contact().count(), equalTo(before.size() + 1));
         Contacts after = app.contact().all();
         contact.withId(after.stream().mapToInt( (g) -> g.getId()).max().getAsInt());
         assertThat(after, equalTo(before.withAdded(contact)));

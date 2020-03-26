@@ -100,11 +100,36 @@ public class ContactHelper extends BaseHelper{
             String firstName = element.findElements(By.cssSelector("td")).get(2).getText();
             String lastName = element.findElements(By.cssSelector("td")).get(1).getText();
             int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
-            ContactData contact = new ContactData().withId(id).withName(firstName).withSurname(lastName);
+            String allPhones = element.findElements(By.cssSelector("td")).get(5).getText();;
+            String allEmails = element.findElements(By.cssSelector("td")).get(4).getText();;
+            String allAddresses = element.findElements(By.cssSelector("td")).get(3).getText();;
+            ContactData contact = new ContactData().withId(id).withName(firstName).withSurname(lastName).
+                    withAllPhones(allPhones).withAllAddress(allAddresses).withAllEmails(allEmails);
             contacts.add(contact);
         }
         return contacts;
     }
 
 
+    public int count() {
+        return driver.findElements(By.name("selected[]")).size();
+    }
+
+    public ContactData infoFromEdit() {
+        String firstName = driver.findElement(By.name("firstname")).getAttribute("value");
+        String lastName = driver.findElement(By.name("lastname")).getAttribute("value");
+        String homePhone = driver.findElement(By.name("home")).getAttribute("value");
+        String mobilePhone = driver.findElement(By.name("mobile")).getAttribute("value");
+        String workPhone = driver.findElement(By.name("work")).getAttribute("value");
+        String email = driver.findElement(By.name("email")).getAttribute("value");
+        String email2 = driver.findElement(By.name("email2")).getAttribute("value");
+        String email3 = driver.findElement(By.name("email3")).getAttribute("value");
+        String address = driver.findElement(By.name("address")).getText();
+        String address2 = driver.findElement(By.name("address2")).getText();
+        ContactData contact = new ContactData().withName(firstName).withSurname(lastName).
+                withHomePhone(homePhone).withMobilePhone(mobilePhone).withWorkPhone(workPhone).
+                withEmail(email).withEmail2(email2).withEmail3(email3).
+                withAddress(address).withAddressSecond(address2);
+        return contact;
+    }
 }

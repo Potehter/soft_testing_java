@@ -12,7 +12,7 @@ public class ContactEdit extends BaseTest {
 
     @BeforeMethod
     public void ensurePreconditiions() {
-        if (! app.contact().ThereAContact()) {
+        if (app.contact().count() == 0) {
             app.contact().create(new ContactData().
                     withName("Name").withMidName("Middle name").withSurname("Surname").withNickname("nick").
                     withTitle("title").withCompany("company"), true);
@@ -29,6 +29,7 @@ public class ContactEdit extends BaseTest {
                 withNickname("nick").withTitle("title").withCompany("company");
         app.contact().modify(modifiedContact.getId(), contact);
         app.goTo().homePage();
+        assertThat(app.contact().count(), equalTo(before.size()));
         Contacts after = app.contact().all();
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
     }
