@@ -2,7 +2,19 @@ package addressbook.tests;
 
 import addressbook.model.ContactData;
 import addressbook.model.Contacts;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
@@ -10,12 +22,24 @@ import static org.hamcrest.MatcherAssert.*;
 
 public class ContactCreate extends BaseTest {
 
-    @Test
-    public void testCreateContact() throws Exception {
+    @DataProvider
+    public Iterator<Object[]> validContactsJSON() throws IOException {
+        List<Object[]> list = new ArrayList<Object[]>();
+        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/ContactData.json")));
+        String json = "";
+        String line = reader.readLine();
+        while (line != null) {
+            json += line;
+            line = reader.readLine();
+        }
+        Gson gson = new Gson();
+        List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
+        return contacts.stream().map((g) -> new Object[] {(g)}).collect(Collectors.toList()).iterator();
+    }
+
+    @Test(dataProvider = "validContactsJSON")
+    public void testCreateContact(ContactData contact) throws Exception {
         Contacts before = app.contact().all();
-        ContactData contact = new ContactData().
-                withName("Name").withMidName("Middle name").withSurname("Surname").
-                withNickname("nick").withTitle("title").withCompany("company");
         app.contact().create(contact);
         app.goTo().homePage();
         assertThat(app.contact().count(), equalTo(before.size() + 1));
