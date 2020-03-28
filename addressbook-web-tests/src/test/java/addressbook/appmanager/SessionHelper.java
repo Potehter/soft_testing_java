@@ -10,7 +10,6 @@ public class SessionHelper extends BaseHelper{
     }
 
     public void login(String username, String password) {
-        driver.get("http://localhost:8080/addressbook/");
         driver.findElement(By.name("user")).clear();
         driver.findElement(By.name("user")).sendKeys(username);
         driver.findElement(By.name("pass")).clear();
