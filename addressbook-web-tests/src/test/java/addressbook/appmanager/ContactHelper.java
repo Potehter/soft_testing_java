@@ -2,9 +2,11 @@ package addressbook.appmanager;
 
 import addressbook.model.ContactData;
 import addressbook.model.Contacts;
+import addressbook.model.GroupData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +57,17 @@ public class ContactHelper extends BaseHelper{
     public void editContactById(int id) {
         driver.findElement(By.cssSelector("a[href='edit.php?id="+ id + "'")).click();
     }
+
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        selectContact(contact.getId());
+        addToGroup(group.getName());
+    }
+
+    public void deleteContactFromGroup(GroupData group, ContactData contact) {
+        contactWithGroup(group.getName());
+        deleteFromGroup(contact.getId());
+    }
+
 
     public void submitContactEdition() {
         click(By.name("update"));
@@ -131,5 +144,23 @@ public class ContactHelper extends BaseHelper{
                 withEmail(email).withEmail2(email2).withEmail3(email3).
                 withAddress(address).withAddressSecond(address2);
         return contact;
+    }
+
+    public void addToGroup(String group) {
+        WebElement selectElem = driver.findElement(By.name("to_group"));
+        Select select = new Select(selectElem);
+        select.selectByVisibleText(group);
+        driver.findElement(By.name("add")).click();
+    }
+
+    public void contactWithGroup(String group) {
+        WebElement selectElem = driver.findElement(By.name("group"));
+        Select select = new Select(selectElem);
+        select.selectByVisibleText(group);
+    }
+
+    public void deleteFromGroup(int id) {
+        driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
+        driver.findElement(By.name("remove")).click();
     }
 }
