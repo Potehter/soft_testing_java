@@ -38,13 +38,13 @@ public class ContactCreate extends BaseTest {
         }
     }
 
-    @Test(dataProvider = "validContactsJSON")
+    @Test
     public void testCreateContact(ContactData contact) throws Exception {
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         app.contact().create(contact);
         app.goTo().homePage();
         assertThat(app.contact().count(), equalTo(before.size() + 1));
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         contact.withId(after.stream().mapToInt( (g) -> g.getId()).max().getAsInt());
         assertThat(after, equalTo(before.withAdded(contact)));
     }

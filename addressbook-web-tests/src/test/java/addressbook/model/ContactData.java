@@ -1,38 +1,78 @@
 package addressbook.model;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
+    @Id
+    @Column(name = "id")
     private int id = Integer.MAX_VALUE;
+
     @Expose
+    @Column(name = "firstname")
     private String name;
+
     @Expose
+    @Column(name = "middlename")
     private String midName;
+
     @Expose
+    @Column(name = "lastname")
     private String surname;
+
     @Expose
+    @Column(name = "nickname")
     private String nickname;
+
     @Expose
+    @Column(name = "title")
     private String title;
+
     @Expose
+    @Column(name = "company")
     private String company;
+
     @Expose
+    @Column(name = "home")
+    @Type(type = "text")
     private String homePhone;
+
     @Expose
+    @Column(name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
+
     @Expose
+    @Column(name = "work")
+    @Type(type = "text")
     private String workPhone;
+
     @Expose
+    @Column(name = "address")
+    @Type(type = "text")
     private String address;
+
     @Expose
+    @Column(name = "address2")
+    @Type(type = "text")
     private String addressSecond;
+    @Type(type = "text")
     private String email;
+    @Type(type = "text")
     private String email2;
+    @Type(type = "text")
     private String email3;
+    @Transient
     private String allPhones;
+    @Transient
     private String allEmails;
+    @Transient
     private String allAddress;
 
     public int getId() {
