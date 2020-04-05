@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.mantis.model.MailMessage;
+import ru.mantis.model.UserData;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,16 +20,19 @@ public class ResetPasswordTest extends BaseTest {
 
     @Test
     public void testReset() throws IOException {
-        long now = System.currentTimeMillis();
-        String email = String.format("user%s@localhost.localdomain", now);
-        String user = String.format("user%s", now);
-        String password = "password";
-        app.navigation().login("administrator", "root");
-        app.registration().start(user, email);
-        List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);
-        String confirmationLink = findConfirmationLink(mailMessages, email);
+        List<UserData> users = app.db().users();
+        UserData testUser = users.get(users.size() - 1);
+        String password = app.getProperty("default.password");
+        loginAdminAndResetPassword(testUser);
+        List<MailMessage> mailMessages = app.mail().waitForMail(1, 10000);
+        String confirmationLink = findConfirmationLink(mailMessages, testUser.getEmail());
         app.registration().finish(confirmationLink, password);
-        assertTrue(app.newSession().login(user, password));
+        assertTrue(app.newSession().login(testUser.getUsername(), password));
+    }
+
+    private void loginAdminAndResetPassword(UserData testUser) {
+        app.navigation().login(app.getProperty("web.login"), app.getProperty("web.password"));
+        app.navigation().resetPassword(testUser.getId());
     }
 
     private String findConfirmationLink(List<MailMessage> mailMessages, String email) {

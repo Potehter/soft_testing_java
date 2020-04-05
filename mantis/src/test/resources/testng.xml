@@ -5,6 +5,7 @@
         <classes>
             <class name="ru.mantis.tests.LoginTest"/>
             <class name="ru.mantis.tests.RegistrationTest"/>
+            <class name="ru.mantis.tests.ResetPasswordTest"/>
         </classes>
     </test>
 </suite>
