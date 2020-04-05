@@ -3,6 +3,7 @@
 <suite name="Suite1" verbose="1" >
     <test name="Groups" >
         <classes>
+            <class name="ru.mantis.tests.BaseTest"/>
             <class name="ru.mantis.tests.LoginTest"/>
             <class name="ru.mantis.tests.RegistrationTest"/>
             <class name="ru.mantis.tests.ResetPasswordTest"/>

@@ -31,7 +31,7 @@ public class SoapHelper {
                 .collect(Collectors.toSet());
     }
 
-    private MantisConnectPortType getMantisConnect() throws MalformedURLException, ServiceException {
+    public MantisConnectPortType getMantisConnect() throws MalformedURLException, ServiceException {
         return new MantisConnectLocator().
                 getMantisConnectPort(new URL(app.getProperty("wsdl.path")));
     }
@@ -51,5 +51,15 @@ public class SoapHelper {
                 .withSummary(createdIssueData.getSummary()).withDescription(createdIssueData.getDescription())
                 .withProject(new Project().withId(createdIssueData.getProject().getId().intValue())
                                           .withName(createdIssueData.getProject().getName()));
+    }
+
+    public boolean isIssueOpen(int issueId) throws MalformedURLException, ServiceException, RemoteException {
+        MantisConnectPortType mc = getMantisConnect();
+        if (mc.mc_issue_exists(login, password, BigInteger.valueOf(issueId))) {
+            IssueData issue = mc.mc_issue_get(login, password, BigInteger.valueOf(issueId));
+            System.out.println(issue.getResolution());
+            return issue.getResolution().equals(new ObjectRef(BigInteger.valueOf(20), "fixed"));
+        }
+        return false;
     }
 }
