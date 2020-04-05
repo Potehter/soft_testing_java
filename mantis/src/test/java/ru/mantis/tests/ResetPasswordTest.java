@@ -7,6 +7,7 @@ import ru.lanwen.verbalregex.VerbalExpression;
 import ru.mantis.model.MailMessage;
 import ru.mantis.model.UserData;
 
+import javax.xml.rpc.ServiceException;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,7 +20,9 @@ public class ResetPasswordTest extends BaseTest {
     }
 
     @Test
-    public void testReset() throws IOException {
+    public void testReset() throws IOException, ServiceException {
+        int issueId = 2;
+        skipIfNotFixed(issueId);
         List<UserData> users = app.db().users();
         UserData testUser = users.get(users.size() - 1);
         String password = app.getProperty("default.password");
