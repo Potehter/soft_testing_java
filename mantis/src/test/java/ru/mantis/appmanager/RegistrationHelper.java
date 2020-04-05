@@ -1,12 +1,8 @@
 package ru.mantis.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Test;
 
 public class RegistrationHelper extends BaseHelper{
-
-
 
 
     public RegistrationHelper(ApplicationManager app) {
