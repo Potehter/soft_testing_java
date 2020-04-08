@@ -42,4 +42,15 @@ public class BaseTest {
         }
     }
 
+
+    public boolean isIssueOpenRest(int issueId) throws RemoteException, ServiceException, MalformedURLException {
+        return app.rest().isIssueOpen(issueId);
+    }
+
+    public void skipIfNotFixedRest(int issueId) throws RemoteException, ServiceException, MalformedURLException {
+        if (isIssueOpenRest(issueId)) {
+            throw new SkipException("Ignored because of issue " + issueId);
+        }
+    }
+
 }

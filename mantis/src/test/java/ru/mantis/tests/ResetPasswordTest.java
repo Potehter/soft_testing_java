@@ -22,8 +22,8 @@ public class ResetPasswordTest extends BaseTest {
 
     @Test
     public void testReset() throws IOException, ServiceException {
-        int issueId = 1;
-        skipIfNotFixed(issueId);
+        int issueId = 2562;
+        skipIfNotFixedRest(issueId);
         List<UserData> users = app.db().users();
         UserData testUser = getTestUser(users);
         String password = app.getProperty("default.password");
