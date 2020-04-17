@@ -30,12 +30,12 @@ public class ApplicationManager {
     private DBHelper dbHelper;
 
     public ApplicationManager(String browser) {
-        this.browser = browser;
+        this.browser = browser.replace("(", "").replace(")", "");
         properties = new Properties();
     }
 
     public void init() throws IOException {
-        String target = System.getProperty("target", "local");
+        String target = System.getProperty("target", "local").replace("(", "").replace(")", "");
         properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
         dbHelper = new DBHelper();
         if ("".equals(properties.getProperty("selenium.server"))) {
@@ -46,11 +46,11 @@ public class ApplicationManager {
                 driver = new FirefoxDriver();
             } else if (browser.equals(BrowserType.IE)) {
                 driver = new InternetExplorerDriver();
-            } else {
-                DesiredCapabilities capabilies = new DesiredCapabilities();
-                capabilies.setBrowserName(browser);
-                driver = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilies);
             }
+        }  else {
+            DesiredCapabilities capabilies = new DesiredCapabilities();
+            capabilies.setBrowserName(browser);
+            driver = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilies);
         }
 
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
